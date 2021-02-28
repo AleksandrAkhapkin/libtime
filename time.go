@@ -12,6 +12,7 @@ type Time struct {
 
 const (
 	ISO8601 = "15:04-07:00"
+	ISO8601Seconds = "15:04:05-07:00"
 )
 
 var (
@@ -45,7 +46,7 @@ func (t *Time) Scan(src interface{}) error {
 	if !ok {
 		return ErrTimeScan
 	}
-	ret, err := time.Parse(ISO8601, b)
+	ret, err := time.Parse(ISO8601Seconds, b)
 	if err != nil {
 		return err
 	}
