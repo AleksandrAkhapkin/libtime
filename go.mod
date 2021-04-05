@@ -1,3 +1,3 @@
-module github.com/Delisa-sama/libtime
+module github.com/AleksandrAkhapkin/libtime
 
 go 1.16
