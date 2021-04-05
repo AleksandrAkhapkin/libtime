@@ -13,7 +13,7 @@ type Time struct {
 const (
 	HHMM        = "15:04"
 	HHMMPostgre = "15:04:05-07:00"
-) //
+) ////
 
 var (
 	ErrTimeParse = errors.New(`ErrTimeParse: should be a string formatted as "15:04-07:00"`)
