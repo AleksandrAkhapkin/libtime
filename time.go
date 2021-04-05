@@ -11,8 +11,8 @@ type Time struct {
 }
 
 const (
-	ISO8601        = "15:04-07:00"
-	ISO8601Postgre = "15:04:05-07"
+	HHMM        = "15:04"
+	HHMMPostgre = "15:04:05-07:00"
 )
 
 var (
@@ -21,15 +21,15 @@ var (
 )
 
 func (t Time) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + t.Format(ISO8601) + `"`), nil
+	return []byte(`"` + t.Format(HHMMPostgre) + `"`), nil
 }
 
 func (t *Time) UnmarshalJSON(b []byte) error {
-	if len(b) != len(ISO8601)+2 {
+	if len(b) != len(HHMM)+2 {
 		return ErrTimeParse
 	}
 	s := string(b)
-	ret, err := time.Parse(ISO8601, s[1:len(ISO8601)+1])
+	ret, err := time.Parse(HHMM, s[1:len(HHMM)+1])
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func (t *Time) UnmarshalJSON(b []byte) error {
 }
 
 func (t Time) Value() (driver.Value, error) {
-	return t.Format(ISO8601), nil
+	return t.Format(HHMMPostgre), nil
 }
 
 func (t *Time) Scan(src interface{}) error {
@@ -46,7 +46,7 @@ func (t *Time) Scan(src interface{}) error {
 	if !ok {
 		return ErrTimeScan
 	}
-	ret, err := time.Parse(ISO8601Postgre, b)
+	ret, err := time.Parse(HHMMPostgre, b)
 	if err != nil {
 		return err
 	}
