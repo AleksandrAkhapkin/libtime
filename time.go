@@ -11,17 +11,19 @@ type Time struct {
 }
 
 const (
-	HHMM        = "15:04"
-	HHMMPostgre = "15:04:05-07:00"
-) ////
+	HHMM           = "15:04"
+	HHMMPostgre    = "15:04:05-07:00"
+	ISO8601        = "15:04-07:00"
+	ISO8601Postgre = "15:04:05-07"
+)
 
 var (
-	ErrTimeParse = errors.New(`ErrTimeParse: should be a string formatted as "15:04-07:00"`)
+	ErrTimeParse = errors.New(`ErrTimeParse: should be a string formatted as "15:04"`)
 	ErrTimeScan  = errors.New(`ErrTimeScan: source must be []byte`)
 )
 
 func (t Time) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + t.Format(HHMMPostgre) + `"`), nil
+	return []byte(`"` + t.Format(ISO8601) + `"`), nil
 }
 
 func (t *Time) UnmarshalJSON(b []byte) error {
@@ -48,7 +50,10 @@ func (t *Time) Scan(src interface{}) error {
 	}
 	ret, err := time.Parse(HHMMPostgre, b)
 	if err != nil {
-		return err
+		ret, err = time.Parse(ISO8601Postgre, b)
+		if err != nil {
+			return err
+		}
 	}
 	t.Time = ret
 	return nil
